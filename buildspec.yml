@@ -8,23 +8,17 @@ phases:
       - aws --version
       - $( aws ecr get-login --no-include-email --region us-east-1)
       - REPOSITORY_URI=408812974241.dkr.ecr.us-east-1.amazonaws.com/express-7edge
-      - COMMIT_HASH=$(echo $CODEBUILD_RESOLVED_SOURCE_VERSION | cut -c 1-7)
-      - IMAGE_TAG=build-$(echo $CODEBUILD_BUILD_ID | awk -F":" '{print $2}')
    build:
     commands:
       - echo Build started on `date`
       - echo Building the Docker image...
-      - docker build -t $REPOSITORY_URI:latest .
-      - docker tag $REPOSITORY_URI:latest $REPOSITORY_URI:$IMAGE_TAG
+      - docker build -t  express-7edge .
+      - docker tag express-7edge:latest 408812974241.dkr.ecr.us-east-1.amazonaws.com/express-7edge:latest 
   post_build:
     commands:
       - echo Build completed on `date`
       - echo Pushing the Docker images...
-      - docker push $REPOSITORY_URI:latest
-      - docker push $REPOSITORY_URI:$IMAGE_TAG
-      - echo Writing image definitions file...
-      - printf '[{"name":"express-7edge","imageUri":"%s"}]' $REPOSITORY_URI:$IMAGE_TAG > imagedefinitions.json
-      - cat imagedefinitions.json 
-artifacts:
-    files: imagedefinitions.json
+      - docker push  408812974241.dkr.ecr.us-east-1.amazonaws.com/express-7edge:latest
+      
+     
     
