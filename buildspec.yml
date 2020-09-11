@@ -14,16 +14,15 @@ phases:
     commands:
       - echo Build started on `date`
       - echo Building the Docker image...
-      - docker build -t  $REPOSITORY_URI:latest .
-      - docker tag  express-7edge:latest $REPOSITORY_URI:$IMAGE_TAG
+      - docker build -t express-7edge .
+      - docker tag express-7edge:latest 408812974241.dkr.ecr.us-east-1.amazonaws.com/express-7edge:latest
   post_build:
     commands:
       - echo Build completed on `date`
       - echo Pushing the Docker images...
-      - docker push $REPOSITORY_URI
-      - docker push $REPOSITORY_URI:$IMAGE_TAG
+      - docker push 408812974241.dkr.ecr.us-east-1.amazonaws.com/express-7edge:latest
       - echo Writing image definitions file...
-      - printf '[{"name":"nodeapp","imageUri":"%s"}]' $REPOSITORY_URI:$IMAGE_TAG > imagedefinitions.json
+      - printf '[{"name":"nodeapp","imageUri":"%s"}]' $REPOSITORY_URI > imagedefinitions.json
       - cat imagedefinitions.json 
 artifacts:
     files: imagedefinitions.json
